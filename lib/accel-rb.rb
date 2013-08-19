@@ -1,4 +1,5 @@
-require_relative 'accel/shell/ticks.rb'
+require_relative 'accel/shell/ticks'
+require_relative 'accel/pry'
 
 require 'fileutils'
 extend FileUtils
