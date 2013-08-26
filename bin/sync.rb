@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require "awesome_print"
 require "open3"
-require "accel-rb"
+require "accel"
 
 softxmt_files = "--exclude=*.test --exclude=*.d --exclude=*.o --exclude=*.a --exclude=*.exe --exclude=.fuse_hidden* --exclude=*.ckpt --exclude=core.* --exclude=*.swp --exclude=.srunrc* --exclude=*.events --exclude=*.trc --exclude=*.edf --exclude=profile.* --exclude=app* --exclude=fn_mappings --exclude=reader.out --exclude=*.prof --exclude=*.events.z --exclude=*.def.z --exclude=*.marker.z --exclude=*.otf"
 
