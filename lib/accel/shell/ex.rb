@@ -3,7 +3,7 @@
 module Accel
   @@ex_filters = []
 
-  def ex(cmd, opts = {prefix:''})
+  def self.ex(cmd, opts = {prefix:''})
     require 'open3'
     out = ''
     Open3.popen2e(cmd) do |i,oe,waiter|
