@@ -18,5 +18,6 @@ otf = Dir.glob("*.otf").max_by {|f| File.mtime(f)}
 base = otf[/(.*)\.otf/,1]
 open("#{base}.sh", "w"){|f| f.write("#{cmd}\n") }
 dest = "trace/#{base}"
+mkdir_p "trace"
 mkdir dest
 `mv #{base}.* #{dest}`
