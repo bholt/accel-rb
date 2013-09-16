@@ -21,3 +21,25 @@ def ex(cmd, opts = {prefix:''})
   end
   return exit_status
 end
+
+###########################################################
+# Meant to better emulate terminal/shell script execution
+# (not working yet, but close)
+def pty(cmd)
+  PTY.spawn cmd do |r,w,pid|
+    Signal.trap("INT"){ puts "{killed}"; Process.kill("INT",pid) }
+    begin
+      r.sync
+      s = r.read_nonblock(4096)
+      $stderr.write(s.gsub(/\n/,"\n| "))
+    rescue IO::WaitReadable
+      IO.select([r])
+      retry
+    rescue Errno::EID => e
+      # ignore
+    ensure
+      ::Process.wait pid
+      Signal.trap("INT", "DEFAULT")
+    end
+  end
+end
