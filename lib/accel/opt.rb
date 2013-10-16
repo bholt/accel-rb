@@ -12,13 +12,17 @@ module Accel
           cls = Integer if cls == Fixnum
           
           @struct[sel.to_sym] = default
-          @parser.on("--#{sel} N", cls){|v| @struct[sel.to_sym] = v }
+          
+          if cls == true.class || cls == false.class # is Boolean
+            @parser.on("--[no-]#{sel}"){|b| @struct[sel.to_sym] = b }
+          else
+            @parser.on("--#{sel} N", cls){|v| @struct[sel.to_sym] = v }
+          end
         end
-        @parser.on()
       end
-      def on(*args, &blk)
-        @parser
-      end
+      # def on(*args, &blk)
+      #   @parser(*args, &blk)
+      # end
     end
   end
   #######################
@@ -27,6 +31,8 @@ module Accel
   #   on("-r","--num_roots N"){|o| @num_roots = o }
   #   # or shorthand (uses flag name for opt member)
   #   num_roots 1
+  #   # or boolean flags, e.g.: --[no-]verbose
+  #   verbose false
   # }
   def self.optparse!(argv = ARGV, &blk)
     require 'optparse'
