@@ -1,3 +1,16 @@
+if not OpenStruct.method_defined? :[]=
+  class OpenStruct
+    def []=(s, val)
+      new_ostruct_member(s)
+      send("#{s}=".to_sym, val)
+    end
+    def [](s)
+      send(s)
+    end
+  end
+end
+
+
 module Accel
   module Impl
     class OptDSL
