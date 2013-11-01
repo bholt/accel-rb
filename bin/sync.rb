@@ -52,11 +52,7 @@ end
 
 def pull(name, local, remote, filter)
   puts "pull: #{remote}/#{name} -> #{local}/#{name}"
-	cmd = "rsync -avz #{filter} #{remote}/#{name} #{local}"
-  #puts cmd
-  Open3.popen2e(cmd) do |i,oe|
-    oe.each {|line| puts line }
-  end
+  system "rsync -avz #{filter} #{remote}/#{name} #{local}"
 end
 
 def push(name, local, remote, filter)
