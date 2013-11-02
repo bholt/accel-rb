@@ -3,6 +3,9 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'accel/version'
 
+version = Gem::Version.new(RUBY_VERSION)
+v2 = Gem::Version.new('2.0.0')
+
 Gem::Specification.new do |spec|
   spec.name          = "accel-rb"
   spec.version       = Accel::VERSION
@@ -19,7 +22,12 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "pry"
-  spec.add_dependency "pry-debugger"
+  
+  if version >= v2
+    spec.add_dependency "pry-byebug"
+  else
+    spec.add_dependency "pry-debugger"
+  end
   spec.add_dependency "grit"
   spec.add_dependency "rugged"
   spec.add_dependency "awesome_print"
