@@ -1,3 +1,5 @@
+require 'ostruct'
+
 if not OpenStruct.method_defined? :[]=
   class OpenStruct
     def []=(s, val)
@@ -18,6 +20,7 @@ module Accel
         @parser = parser
         @struct = struct
       end
+      
       def method_missing(sel, *args, &blk)
         if args.length == 1 # shorthand syntax: 'flag default'
           default = args[0]
@@ -33,9 +36,10 @@ module Accel
           end
         end
       end
-      # def on(*args, &blk)
-      #   @parser(*args, &blk)
-      # end
+      
+      def on(*args, &blk)
+        @parser.on(*args) { @struct.instance_exec(&blk) }
+      end
     end
   end
   #######################
@@ -57,4 +61,17 @@ module Accel
     }.parse!(argv)
     return s
   end
+end
+
+###############
+# Tests
+if __FILE__ == $PROGRAM_NAME
+  puts "-- Testing opt.rb"
+  
+  o = Accel::optparse! {
+    on('-p', '--progress'){ self.progress = true }
+  }
+  
+  puts o
+  
 end
