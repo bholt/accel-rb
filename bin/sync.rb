@@ -51,12 +51,17 @@ def alias_lookup(name)
 end
 
 def pull(name, local, remote, filter)
-  puts "pull: #{remote}/#{name} -> #{local}/#{name}"
-  system "rsync -avz #{filter} #{remote}/#{name} #{local}"
+  # puts "pull: #{remote}/#{name} -> #{local}/#{name}"
+  if $opt.progress
+    # system "rsync --info=progress2 -avz #{filter} #{remote}/#{name} #{local}"
+    system "rsync --progress -avz #{filter} #{remote}/#{name} #{local}"
+  else
+    system "rsync --quiet -avz #{filter} #{remote}/#{name} #{local}"
+  end
 end
 
 def push(name, local, remote, filter)
-  puts "push: #{local}/#{name} -> #{remote}/#{name}"
+  # puts "push: #{local}/#{name} -> #{remote}/#{name}"
   cmd = "rsync -avz #{filter} --exclude=.sync.rb #{local}/#{name} #{remote}"
   Open3.popen2e(cmd) do |i,oe|
     oe.each {|line| puts line }
@@ -72,6 +77,11 @@ end
 # Main                     #
 ############################
 if __FILE__ == $PROGRAM_NAME
+  require 'accel/opt'
+  $opt = Accel::optparse!(ARGV){
+    on("-p","--progress"){ self.progress = true }
+  }
+  
   if ARGV.length < 1 or ARGV.length > 2 then
     print_usage
   end
