@@ -15,7 +15,10 @@ module Accel
       end
       # TODO: add filtering capability
       exit_status = waiter.value
-      raise "shell command error: #{exit_status}" if not exit_status.success?
+      if not exit_status.success?
+        warn "command: #{cmd}"
+        raise "shell command error: #{exit_status}"
+      end
     end
     return out
   end
