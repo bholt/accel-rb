@@ -51,7 +51,7 @@ def alias_lookup(name)
 end
 
 def pull(name, local, remote, filter)
-  # puts "pull: #{remote}/#{name} -> #{local}/#{name}"
+  puts "pull: #{remote}/#{name} -> #{local}/#{name}" if $opt.verbose
   if $opt.progress
     # system "rsync --info=progress2 -avz #{filter} #{remote}/#{name} #{local}"
     system "rsync --progress -avz #{filter} #{remote}/#{name} #{local}"
@@ -80,6 +80,7 @@ if File.basename(__FILE__) == File.basename($PROGRAM_NAME)
   require 'accel/opt'
   $opt = Accel::optparse!(ARGV){
     on("-p","--progress"){ self.progress = true }
+    on("-v","--verbose"){ self.verbose = true }
   }
   
   if ARGV.length < 1 or ARGV.length > 2 then
