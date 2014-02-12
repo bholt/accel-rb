@@ -76,7 +76,7 @@ end
 ############################
 # Main                     #
 ############################
-if __FILE__ == $PROGRAM_NAME
+if File.basename(__FILE__) == File.basename($PROGRAM_NAME)
   require 'accel/opt'
   $opt = Accel::optparse!(ARGV){
     on("-p","--progress"){ self.progress = true }
