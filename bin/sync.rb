@@ -52,12 +52,17 @@ end
 
 def pull(name, local, remote, filter)
   puts "pull: #{remote}/#{name} -> #{local}/#{name}" if $opt.verbose
+  flags = ""
   if $opt.progress
-    # system "rsync --info=progress2 -avz #{filter} #{remote}/#{name} #{local}"
-    system "rsync --progress -avz #{filter} #{remote}/#{name} #{local}"
+    if $opt.rsync_version >= 310
+      flags << " --info=progress2"
+    else
+      flags << " --progress"
+    end
   else
-    system "rsync --quiet -avz #{filter} #{remote}/#{name} #{local}"
+    flags << "--quiet"
   end
+  system "rsync #{flags} -avz #{filter} #{remote}/#{name} #{local}"
 end
 
 def push(name, local, remote, filter)
@@ -83,6 +88,11 @@ if File.basename(__FILE__) == File.basename($PROGRAM_NAME)
     on("-v","--verbose"){ self.verbose = true }
   }
   
+  if `rsync --version | head -1` =~ /version 3.1/
+    puts "newer rsync detected!"
+    $opt.rsync_version = 310
+  end
+    
   if ARGV.length < 1 or ARGV.length > 2 then
     print_usage
   end
