@@ -62,7 +62,10 @@ def pull(name, local, remote, filter)
   else
     flags << "--quiet"
   end
-  system "rsync #{flags} -avz #{filter} #{remote}/#{name} #{local}"
+  
+  cmd = "rsync #{flags} -az #{filter} #{remote}/#{name} #{local}"
+  puts cmd if $opt.verbose
+  system cmd
 end
 
 def push(name, local, remote, filter)
