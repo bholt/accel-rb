@@ -94,6 +94,8 @@ if File.basename(__FILE__) == File.basename($PROGRAM_NAME)
   if `rsync --version | head -1` =~ /version 3.1/
     puts "newer rsync detected!" if $opt.verbose
     $opt.rsync_version = 310
+  else
+    $opt.rsync_version = 0
   end
     
   if ARGV.length < 1 or ARGV.length > 2 then
